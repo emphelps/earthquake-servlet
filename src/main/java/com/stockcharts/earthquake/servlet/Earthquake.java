@@ -9,13 +9,6 @@ public class Earthquake {
     private String place;
     private long time;
     
-    
-    //do we need????
-    public Earthquake()
-    {
-        
-    }
-    
     public Earthquake withId(String id)
     {
         this.id = id;
@@ -50,6 +43,12 @@ public class Earthquake {
     {
         this.time = time;
         return this;
+    }
+    
+    @Override 
+    public String toString()
+    {
+        return (id + " " + Float.toString(magnitude) + " " + Float.toString(latitude) + " " + Float.toString(longitude) + " " + place + " " + Long.toString(time));
     }
     
 }

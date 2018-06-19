@@ -25,6 +25,11 @@ public class Main {
         
         List<Earthquake> earthquakes = new ArrayList();
         earthquakes = getEarthquakes();
+        
+        for(Earthquake e : earthquakes)
+        {
+            System.out.println(e);
+        }
                
     }
     
