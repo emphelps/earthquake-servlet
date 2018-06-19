@@ -67,8 +67,7 @@ public class EarthquakesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     {
-        EarthquakeDAO earthquakeDAO = new EarthquakeDAO();
-        List<Earthquake> earthquakes = earthquakeDAO.getEarthquakes();
+        List<Earthquake> earthquakes = EarthquakeDAO.getAllEarthquakes();
         
         logger.debug("earthquakes list size: " + earthquakes.size());
         JSONArray ja = new JSONArray();

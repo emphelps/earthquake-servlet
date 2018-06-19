@@ -15,7 +15,12 @@ public class EarthquakeDAO {
     
     private static final Logger logger = Logger.getLogger(EarthquakeDAO.class.getName());
     
-    public static List<Earthquake> getEarthquakes()
+    public static List<Earthquake> getAllEarthquakes()
+    {
+        return getEarthquakes();
+    }
+    
+    private static List<Earthquake> getEarthquakes()
     {
         String queury = "SELECT * FROM InternDB.Earthquakes";
         List<Earthquake> earthquakeList = new ArrayList<Earthquake>();
