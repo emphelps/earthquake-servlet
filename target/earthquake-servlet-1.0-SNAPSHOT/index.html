@@ -11,33 +11,19 @@
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     </head>
     <body>
-        <div id="app">
-            
-            <div>{{ earthquake.id }}</div>
-            <div>{{ earthquake.magnitude }}</div>
-            <div>{{ earthquake.latitude }}</div>
-            <div>{{ earthquake.longitude }}</div>
-            <div>{{ earthquake.place }}</div>
-            <div>{{ earthquake.time }}</div>
-            
-        </div>
-        
-        <script>
-            
-            var quake_spec = {
-                el: "#app",
-                data: {
-                    earthquake: null
-                }
-            };
-            
-            var vue = new Vue(quake_spec);
-            
-            $.get("earthquakes", function(response)
-            {
-                vue.earthquake = response;
-            });
-            
-        </script>
+        <table>
+            <tr>
+                <th>id</th>
+                <th>magnitude</th>
+                <th>latitude</th>
+                <th>longitude</th>
+                <th>place</th>
+                <th>time</th>
+            </tr>
+            <tr>
+                <td>1239vjnk</td> <!-- data -->
+                <td>jasklda</td>
+            </tr>
+        </table>
     </body>
 </html>
