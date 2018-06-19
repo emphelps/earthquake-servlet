@@ -21,9 +21,36 @@
                 <th>time</th>
             </tr>
             <tr>
-                <td>1239vjnk</td> <!-- data -->
-                <td>jasklda</td>
+                <td> 
+                    
+                </td> 
             </tr>
         </table>
+
+        <ul id="app">
+            <li v-for="earthquake in earthquakes">
+                {{ earthquake.id }}
+                {{ earthquake.magnitude }}
+                {{ earthquake.latitude }}
+                {{ earthquake.longitude }}
+                {{ earthquake.place }}
+                {{ earthquake.time }}
+            </li>
+        </ul>
+        <script>
+            
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    earthquakes : []
+                }
+            });
+            
+            $.get("servlet", function(response){
+                app.earthquakes = response;
+                
+            });
+            
+        </script>
     </body>
 </html>
