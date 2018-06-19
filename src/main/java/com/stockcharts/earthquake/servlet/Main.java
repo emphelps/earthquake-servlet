@@ -23,8 +23,7 @@ public class Main {
             return;
         }
         
-        List<Earthquake> earthquakes = new ArrayList();
-        earthquakes = getEarthquakes();
+        List<Earthquake> earthquakes = getEarthquakes();
         
         for(Earthquake e : earthquakes)
         {
@@ -36,7 +35,7 @@ public class Main {
     private static List<Earthquake> getEarthquakes()
     {
         // select * -> select all columns
-        String queury = "SELECT * FROM InternDB.Earthquakes WHERE magnitude > 5";
+        String queury = "SELECT * FROM InternDB.Earthquakes";
         List<Earthquake> earthquakeList = new ArrayList<Earthquake>();
         
         // trying w resources t connect to database?
@@ -45,9 +44,9 @@ public class Main {
         try(Connection conn = DriverManager.getConnection(DATABASE_URL);
             PreparedStatement stmt = conn.prepareStatement(queury)){
             // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-            // protecting against sequal injection (from users)
+            // protecting against sql injection (from users)
             // ensuring that the queuery doesnt have anything that could
-            // hurt our table (sequal injection)
+            // hurt our table (sql injection)
             
             // fetch results set
             ResultSet rs = stmt.executeQuery();
@@ -61,14 +60,13 @@ public class Main {
             while(rs.next())
             {
                 
-                Earthquake newEarthquake = new Earthquake();
-                
-                newEarthquake = newEarthquake.withId(rs.getString("id"));
-                newEarthquake = newEarthquake.withMagnitude(rs.getFloat("float"));
-                newEarthquake = newEarthquake.withLongitude(rs.getFloat("longitude"));
-                newEarthquake = newEarthquake.withLatitude(rs.getFloat("latitude"));
-                newEarthquake = newEarthquake.withPlace(rs.getString("place"));
-                newEarthquake = newEarthquake.withTime(rs.getLong("time"));
+                Earthquake newEarthquake = new Earthquake()
+                        .withId(rs.getString("id"))
+                        .withMagnitude((rs.getFloat("magnitude")))
+                        .withLatitude((rs.getFloat("latitude")))
+                        .withLongitude((rs.getFloat("longitude")))
+                        .withPlace((rs.getString("place")))
+                        .withTime((rs.getLong("time")));
               
                 earthquakeList.add(newEarthquake);
             }

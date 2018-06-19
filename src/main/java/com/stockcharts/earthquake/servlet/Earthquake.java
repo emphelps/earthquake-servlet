@@ -1,5 +1,8 @@
 package com.stockcharts.earthquake.servlet;
 
+import java.util.Comparator;
+import org.json.JSONObject;
+
 public class Earthquake {
     
     private String id;
@@ -44,11 +47,75 @@ public class Earthquake {
         this.time = time;
         return this;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public float getMagnitude() {
+        return magnitude;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public long getTime() {
+        return time;
+    }
+    
+    
     
     @Override 
     public String toString()
     {
-        return (id + " " + Float.toString(magnitude) + " " + Float.toString(latitude) + " " + Float.toString(longitude) + " " + place + " " + Long.toString(time));
+        JSONObject jo = new JSONObject(this);
+        return jo.toString();
     }
+    
+    public static Comparator<Earthquake> MAGNITUDE = new Comparator<Earthquake>()
+    {
+        @Override
+        public int compare(Earthquake one, Earthquake two)
+        {
+            return Float.compare(one.magnitude, two.magnitude);
+        }
+    };
+    
+    public static Comparator<Earthquake> TIME = new Comparator<Earthquake>()
+    {
+        @Override
+        public int compare(Earthquake one, Earthquake two)
+        {
+            return Long.compare(one.time, two.time);
+        }
+    };
+    
+    public static Comparator<Earthquake> LATITUDE = new Comparator<Earthquake>()
+    {
+        @Override
+        public int compare(Earthquake one, Earthquake two)
+        {
+            return Float.compare(one.latitude, two.latitude);
+        }
+    };
+    
+    public static Comparator<Earthquake> LONGITUDE = new Comparator<Earthquake>()
+    {
+        @Override
+        public int compare(Earthquake one, Earthquake two)
+        {
+            return Float.compare(one.longitude, two.longitude);
+        }
+    };
+    
     
 }
