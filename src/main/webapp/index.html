@@ -9,8 +9,22 @@
         
         <!-- Vue.js -->
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        
+        <!-- Maps API KEY AIzaSyDnUM4ZqWUX1-sF1tuiGtMb84u3UxZTIv8 -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnUM4ZqWUX1-sF1tuiGtMb84u3UxZTIv8"></script>
+        
+        <style>
+            #map {
+                height: 500px;
+                width: 500px;
+            }
+        </style>
+    
     </head>
+  
     <body>
+        <div id="map"></div>
+        
         <table id="app">
             <tr>
                 <th>id</th>
@@ -21,7 +35,7 @@
                 <th>time</th>
             </tr>
                   
-            <tr v-for="earthquake in earthquakes" v-on:click="logCoordinates()">
+            <tr v-for="earthquake in earthquakes" v-on:click="renderMap(earthquake)">
                 <td> 
                    {{ earthquake.id }}
                 </td> 
@@ -47,20 +61,41 @@
                 </td> 
             </tr>
         </table>
-
-       
+        
         <script>
-            
+      
             var app = new Vue({
                 el: "#app",
                 data: {
                     earthquakes : []
                 },
-                
+                watch: {
+                    earthquakes(){
+                        this.renderMap(this.earthquakes[0]);                
+                    }
+                },
                 methods: {
-                    logCoordinates : function()
+                    renderMap(earthquake)
                     {
-                        console.log("latitude: " + latitude + ", longitude: " + longitude);
+                        var coordinates = {
+                            lat : earthquake.latitude,
+                            lng : earthquake.longitude
+                        };
+                        var map_spec = {
+                            center : coordinates,
+                            mapTypeId : 'terrain',
+                            zoom: 7
+                        };
+
+                        var map = new google.maps.Map(document.getElementById('map'), map_spec);
+
+
+                        var marker_spec = {
+                            position: coordinates,
+                            map: map
+                        };
+
+                        var marker = new google.maps.Marker(marker_spec);
                     }
                 }
             });
@@ -69,7 +104,10 @@
                 app.earthquakes = response;
                 
             });
-            
+           
         </script>
+        
+        
+        
     </body>
 </html>
