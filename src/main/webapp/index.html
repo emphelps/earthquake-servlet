@@ -21,7 +21,7 @@
                 <th>time</th>
             </tr>
                   
-            <tr v-for="earthquake in earthquakes">
+            <tr v-for="earthquake in earthquakes" v-on:click="logCoordinates()">
                 <td> 
                    {{ earthquake.id }}
                 </td> 
@@ -55,6 +55,13 @@
                 el: "#app",
                 data: {
                     earthquakes : []
+                },
+                
+                methods: {
+                    logCoordinates : function()
+                    {
+                        console.log("latitude: " + latitude + ", longitude: " + longitude);
+                    }
                 }
             });
             
