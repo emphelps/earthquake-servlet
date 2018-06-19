@@ -61,9 +61,7 @@
                 </td> 
             </tr>
         </table>
-        
         <script>
-      
             var app = new Vue({
                 el: "#app",
                 data: {
@@ -81,6 +79,7 @@
                             lat : earthquake.latitude,
                             lng : earthquake.longitude
                         };
+                        
                         var map_spec = {
                             center : coordinates,
                             mapTypeId : 'terrain',
