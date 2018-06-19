@@ -11,7 +11,7 @@
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     </head>
     <body>
-        <table>
+        <table id="app">
             <tr>
                 <th>id</th>
                 <th>magnitude</th>
@@ -20,23 +20,35 @@
                 <th>place</th>
                 <th>time</th>
             </tr>
-            <tr>
+                  
+            <tr v-for="earthquake in earthquakes">
                 <td> 
-                    
+                   {{ earthquake.id }}
+                </td> 
+
+                <td>
+                    {{ earthquake.magnitude }}
+                </td>
+
+                <td>
+                    {{ earthquake.latitude }}
+                </td>
+
+                <td>
+                    {{ earthquake.longitude }}
+                </td>
+
+                <td>
+                    {{ earthquake.place }}
+                </td>
+
+                <td>
+                    {{ earthquake.time }}
                 </td> 
             </tr>
         </table>
 
-        <ul id="app">
-            <li v-for="earthquake in earthquakes">
-                {{ earthquake.id }}
-                {{ earthquake.magnitude }}
-                {{ earthquake.latitude }}
-                {{ earthquake.longitude }}
-                {{ earthquake.place }}
-                {{ earthquake.time }}
-            </li>
-        </ul>
+       
         <script>
             
             var app = new Vue({
