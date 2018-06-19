@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.*;
 
 public class Main {
     
@@ -22,8 +23,16 @@ public class Main {
             return;
         }
         
+        List<Earthquake> earthquakes = new ArrayList();
+        earthquakes = getEarthquakes();
+               
+    }
+    
+    private static List<Earthquake> getEarthquakes()
+    {
         // select * -> select all columns
         String queury = "SELECT * FROM InternDB.Earthquakes WHERE magnitude > 5";
+        List<Earthquake> earthquakeList = new ArrayList<Earthquake>();
         
         // trying w resources t connect to database?
         // associating creation of connection
@@ -37,31 +46,37 @@ public class Main {
             
             // fetch results set
             ResultSet rs = stmt.executeQuery();
-            int numCols = rs.getMetaData().getColumnCount();
-            for(int i = 1; i <= numCols; i++)
-            {
-                System.out.println("column name at " + i + ": " + rs.getMetaData().getColumnName(i));
-            }
+            
+//            int numCols = rs.getMetaData().getColumnCount();
+//            for(int i = 1; i <= numCols; i++)
+//            {
+//                System.out.println("column name at " + i + ": " + rs.getMetaData().getColumnName(i));
+//            }
             
             while(rs.next())
             {
-                String id = rs.getString("id");
-                float magnitude = rs.getFloat("magnitude");
-                float longitude = rs.getFloat("longitude");
-                float latitude = rs.getFloat("latitude");
-                String place = rs.getString("place");
-                long time = rs.getLong("time");
-                // get the rest of the data from the db
+                
+                Earthquake newEarthquake = new Earthquake();
+                
+                newEarthquake = newEarthquake.withId(rs.getString("id"));
+                newEarthquake = newEarthquake.withMagnitude(rs.getFloat("float"));
+                newEarthquake = newEarthquake.withLongitude(rs.getFloat("longitude"));
+                newEarthquake = newEarthquake.withLatitude(rs.getFloat("latitude"));
+                newEarthquake = newEarthquake.withPlace(rs.getString("place"));
+                newEarthquake = newEarthquake.withTime(rs.getLong("time"));
+              
+                earthquakeList.add(newEarthquake);
             }
             
         } catch(SQLException e)
         {
             System.out.println("error querying database" + e);
         }
-                
+        
+        return earthquakeList;
     }
     
 }
 
 // creat earthquake class - fluid constructor????
-// create method that returns lsit o fearquakes...rn select *, no magnitude > 5 for rn
+// create method that returns list of fearquakes...rn select *, no magnitude > 5 for rn
