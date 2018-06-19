@@ -59,7 +59,7 @@ public class Main {
             
             while(rs.next())
             {
-                
+                // use fluid constructors
                 Earthquake newEarthquake = new Earthquake()
                         .withId(rs.getString("id"))
                         .withMagnitude((rs.getFloat("magnitude")))
