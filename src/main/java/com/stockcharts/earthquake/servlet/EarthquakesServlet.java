@@ -78,11 +78,11 @@ public class EarthquakesServlet extends HttpServlet {
         
         switch(requestVal)
         {
-//            case "magnitude":
-//            {
-//                Collections.sort(earthquakes, Earthquake.MAGNITUDE);
-//                break;
-//            }
+            case "magnitude":
+            {
+                Collections.sort(earthquakes, Earthquake.MAGNITUDE);
+                break;
+            }
             
             case "latitude":
             {
