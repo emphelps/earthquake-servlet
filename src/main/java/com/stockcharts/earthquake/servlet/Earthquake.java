@@ -72,8 +72,6 @@ public class Earthquake {
         return time;
     }
     
-    
-    
     @Override 
     public String toString()
     {

@@ -19,7 +19,6 @@
                 width: 500px;
             }
         </style>
-    
     </head>
   
     <body>
@@ -27,6 +26,7 @@
         
         <div id="app">
             <p>{{ message }}</p>
+            
             <table>
                 <tr>
                     <th><button v-on:click="sort('id')">ID</button></th>
@@ -63,9 +63,9 @@
                     </td> 
                 </tr>
 
-            </table>
-            
+            </table>  
         </div>
+        
         <script>
             var app = new Vue({
                 el: "#app",
@@ -102,9 +102,9 @@
                         var marker = new google.maps.Marker(marker_spec);
                     },
                     
-                    sort(method)
+                    sort(methodToSortBy)
                     {
-                        var request = "servlet?sort=" + method;
+                        var request = "servlet?sort=" + methodToSortBy;
                         $.get(request, function(response){
                             app.earthquakes = response;
                         });

@@ -1,6 +1,5 @@
 package com.stockcharts.earthquake.servlet;
 
-import static com.stockcharts.earthquake.servlet.EarthquakesServlet.DATABASE_URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -25,7 +24,7 @@ public class EarthquakeDAO {
         String queury = "SELECT * FROM InternDB.Earthquakes";
         List<Earthquake> earthquakeList = new ArrayList<Earthquake>();
         
-        try(Connection conn = DriverManager.getConnection(DATABASE_URL);
+        try(Connection conn = DriverManager.getConnection(EarthquakesServlet.DATABASE_URL);
             PreparedStatement stmt = conn.prepareStatement(queury)){
            
             ResultSet rs = stmt.executeQuery();
