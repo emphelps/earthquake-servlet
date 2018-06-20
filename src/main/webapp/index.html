@@ -25,46 +25,52 @@
     <body>
         <div id="map"></div>
         
-        <table id="app">
-            <tr>
-                <th>id</th>
-                <th>magnitude</th>
-                <th>latitude</th>
-                <th>longitude</th>
-                <th>place</th>
-                <th>time</th>
-            </tr>
-                  
-            <tr v-for="earthquake in earthquakes" v-on:click="renderMap(earthquake)">
-                <td> 
-                   {{ earthquake.id }}
-                </td> 
+        <div id="app">
+            <p>{{ message }}</p>
+            <table>
+                <tr>
+                    <th><button v-on:click="sort('id')">id</button></th>
+                    <th><button v-on:click="sort('magnitude')">magnitude</button></th>
+                    <th><button v-on:click="sort('latitude')">latitude</button></th>
+                    <th><button v-on:click="sort('longitude')">longitude</button></th>
+                    <th><button v-on:click="sort('place')">place</button></th>
+                    <th><button v-on:click="sort('time')">time</button></th>
+                </tr>
 
-                <td>
-                    {{ earthquake.magnitude }}
-                </td>
+                <tr v-for="earthquake in earthquakes" v-on:click="renderMap(earthquake)">
+                    <td> 
+                       {{ earthquake.id }}
+                    </td> 
 
-                <td>
-                    {{ earthquake.latitude }}
-                </td>
+                    <td>
+                        {{ earthquake.magnitude }}
+                    </td>
 
-                <td>
-                    {{ earthquake.longitude }}
-                </td>
+                    <td>
+                        {{ earthquake.latitude }}
+                    </td>
 
-                <td>
-                    {{ earthquake.place }}
-                </td>
+                    <td>
+                        {{ earthquake.longitude }}
+                    </td>
 
-                <td>
-                    {{ earthquake.time }}
-                </td> 
-            </tr>
-        </table>
+                    <td>
+                        {{ earthquake.place }}
+                    </td>
+
+                    <td>
+                        {{ earthquake.time }}
+                    </td> 
+                </tr>
+
+            </table>
+            
+        </div>
         <script>
             var app = new Vue({
                 el: "#app",
                 data: {
+                    message: "To sort the earthquakes, select which column you would like to sort by.",
                     earthquakes : []
                 },
                 watch: {
@@ -94,6 +100,14 @@
                         };
 
                         var marker = new google.maps.Marker(marker_spec);
+                    },
+                    
+                    sort(method)
+                    {
+                        var request = "servlet?sort=" + method;
+                        $.get(request, function(response){
+                            app.earthquakes = response;
+                        });
                     }
                 }
             });
