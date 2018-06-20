@@ -29,12 +29,12 @@
             <p>{{ message }}</p>
             <table>
                 <tr>
-                    <th><button v-on:click="sort('id')">id</button></th>
-                    <th><button v-on:click="sort('magnitude')">magnitude</button></th>
-                    <th><button v-on:click="sort('latitude')">latitude</button></th>
-                    <th><button v-on:click="sort('longitude')">longitude</button></th>
-                    <th><button v-on:click="sort('place')">place</button></th>
-                    <th><button v-on:click="sort('time')">time</button></th>
+                    <th><button v-on:click="sort('id')">ID</button></th>
+                    <th><button v-on:click="sort('magnitude')">MAGNITUDE</button></th>
+                    <th><button v-on:click="sort('latitude')">LATITUDE</button></th>
+                    <th><button v-on:click="sort('longitude')">LONGITUDE</button></th>
+                    <th><button v-on:click="sort('place')">PLACE</button></th>
+                    <th><button v-on:click="sort('time')">TIME</button></th>
                 </tr>
 
                 <tr v-for="earthquake in earthquakes" v-on:click="renderMap(earthquake)">
