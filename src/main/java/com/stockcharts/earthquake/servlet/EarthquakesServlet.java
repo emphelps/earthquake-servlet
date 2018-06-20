@@ -74,26 +74,37 @@ public class EarthquakesServlet extends HttpServlet {
         
         logger.debug("requestVal: " + requestVal);
         
-        if(requestVal != null)
+        if(requestVal == null) requestVal = "";
+        
+        switch(requestVal)
         {
-            switch(requestVal)
+//            case "magnitude":
+//            {
+//                Collections.sort(earthquakes, Earthquake.MAGNITUDE);
+//                break;
+//            }
+            
+            case "latitude":
             {
-                case "magnitude":
-                {
-                    Collections.sort(earthquakes, Earthquake.MAGNITUDE);
-                    break;
-                }
-                
-                case "time":
-                {
-                    Collections.sort(earthquakes, Earthquake.TIME);
-                    break;
-                }
-                
-                default:
-                {
-                    break;
-                }
+                Collections.sort(earthquakes, Earthquake.LATITUDE);
+                break;
+            }
+            
+            case "longitude":
+            {
+                Collections.sort(earthquakes, Earthquake.LONGITUDE);
+                break;
+            }
+
+            case "time":
+            {
+                Collections.sort(earthquakes, Earthquake.TIME);
+                break;
+            }
+
+            default:
+            {
+                break;
             }
         }
         
