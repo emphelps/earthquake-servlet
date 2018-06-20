@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -69,13 +70,36 @@ public class EarthquakesServlet extends HttpServlet {
     {
         List<Earthquake> earthquakes = EarthquakeDAO.getAllEarthquakes();
         
-        logger.debug("earthquakes list size: " + earthquakes.size());
-        JSONArray ja = new JSONArray();
+        String requestVal = request.getParameter("sort");
         
-        for(int i = 0; i < earthquakes.size(); i++)
+        logger.debug("requestVal: " + requestVal);
+        
+        if(requestVal != null)
         {
-            ja.put(new JSONObject(earthquakes.get(i)));
+            switch(requestVal)
+            {
+                case "magnitude":
+                {
+                    Collections.sort(earthquakes, Earthquake.MAGNITUDE);
+                    break;
+                }
+                
+                case "time":
+                {
+                    Collections.sort(earthquakes, Earthquake.TIME);
+                    break;
+                }
+                
+                default:
+                {
+                    break;
+                }
+            }
         }
+        
+        logger.debug("earthquakes list size: " + earthquakes.size());
+        JSONArray ja = new JSONArray(earthquakes);
+        
         
         logger.debug("JSONArray length: " + ja.length());
         
