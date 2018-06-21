@@ -31,6 +31,11 @@
             <version>1.2.17</version>
         </dependency>
         <dependency>
+            <groupId>com.stockcharts</groupId>
+            <artifactId>commons</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>

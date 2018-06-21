@@ -6,30 +6,46 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import com.stockcharts.commons.net.*;
+import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Main {
     
     private static final String DB_DRIVER_CLASS = "org.mariadb.jdbc.Driver";
+    private static final String EARTHQUAKES_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
     public static final String DATABASE_URL = "jdbc:mariadb:aurora://scc-intern-db.couiu6erjuou.us-east-1.rds.amazonaws.com:3306/InternDB?user=intern&password=stockcharts2018&trustServerCertificate=true&connectTimeout=5000";
     
-    public static void main(String args[])
+    public static void main(String args[]) throws IOException
     {
-        try
-        {
-            Class.forName(DB_DRIVER_CLASS); // load the driver class
-        } catch(ClassNotFoundException e) // if we cant find the diver class
-        {
-            System.out.println("Driver class not found" + e);
-            return;
-        }
+        // fetches, parses, puts into response object
+        RestResponse response = new RestRequest(EARTHQUAKES_URL).doGet();
         
-        List<Earthquake> earthquakes = getEarthquakes();
+        String responseBody = response.getBody();
         
-        for(Earthquake e : earthquakes)
-        {
-            System.out.println(e);
-        }
+        //System.out.println(responseBody);
+        
+        JSONObject jo = new JSONObject(response.getBody());
+        JSONArray features = jo.getJSONArray("features");
+        
+        List<Earthquake> earthquakes = getEarthquakesFromJSONArray(features);
+        
+        Collections.sort(earthquakes, Earthquake.MAGNITUDE);
+        System.out.println(earthquakes.toString());
                
+    }
+    
+    private static List<Earthquake> getEarthquakesFromJSONArray(JSONArray ja)
+    {
+        List<Earthquake> earthquakes = new ArrayList<>();
+        
+        for(int i = 0; i < ja.length(); i++)
+        {
+            earthquakes.add(getEarthquakesFromJSONObject(ja.getJSONObject(i)));
+        }
+        
+        return earthquakes;
     }
     
     private static List<Earthquake> getEarthquakes()
