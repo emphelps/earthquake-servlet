@@ -1,5 +1,6 @@
 package com.stockcharts.earthquake.servlet;
 
+import com.google.common.cache.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -10,6 +11,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -26,9 +29,12 @@ public class EarthquakesServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(EarthquakesServlet.class.getName());
     private static final String DB_DRIVER_CLASS = "org.mariadb.jdbc.Driver";
     public static final String DATABASE_URL = "jdbc:mariadb:aurora://scc-intern-db.couiu6erjuou.us-east-1.rds.amazonaws.com:3306/InternDB?user=intern&password=stockcharts2018&trustServerCertificate=true&connectTimeout=5000";
+    public static final String EARTHQUAKES_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+    
+    private Cache<String, List<Earthquake>> earthquakeCache;
     
     @Override
-    public  void init(ServletConfig config) throws ServletException
+    public void init(ServletConfig config) throws ServletException
     {
         super.init(config);
         
@@ -46,6 +52,12 @@ public class EarthquakesServlet extends HttpServlet {
             throw new UnavailableException("Driver class not found");
         }
         logger.warn("...driver class loaded");
+        
+        logger.warn("Setting up Guava Cache...");
+        earthquakeCache = CacheBuilder.newBuilder()
+                .expireAfterAccess(30, TimeUnit.SECONDS)
+                .build();
+        logger.warn("...success");
         
         logger.warn("==================================================");
         logger.warn("           earthquake-servlet : init() - COMPLETE");
@@ -68,7 +80,21 @@ public class EarthquakesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     {
-        List<Earthquake> earthquakes = EarthquakeDAO.getEarthquakesFromDB();
+        //List<Earthquake> earthquakes = EarthquakeDAO.getEarthquakesFromDB();
+        
+        List<Earthquake> earthquakes = earthquakeCache.getIfPresent("all");
+       
+        if(earthquakes == null)
+        {
+            try{
+                earthquakes = EarthquakeDAO.getEarthquakesFromFeed();
+                earthquakeCache.put("all", earthquakes);
+            }
+            catch(IOException e)
+            {
+                logger.error("IOException reading from Earthquakes Feed", e);
+            }
+        }
         
         String requestVal = request.getParameter("sort");
         

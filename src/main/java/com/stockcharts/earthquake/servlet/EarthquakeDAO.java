@@ -1,5 +1,7 @@
 package com.stockcharts.earthquake.servlet;
 
+import com.stockcharts.commons.net.RestRequest;
+import com.stockcharts.commons.net.RestResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -61,15 +64,27 @@ public class EarthquakeDAO {
     
     public static List<Earthquake> getEarthquakesFromFeed() throws IOException
     {
+        // fetches, parses, puts into response object
+        RestResponse response = new RestRequest(EarthquakesServlet.EARTHQUAKES_URL).doGet();
+        
+        String responseBody = response.getBody();
+        
+        //System.out.println(responseBody);
+        
+        JSONObject jo = new JSONObject(response.getBody());
+        JSONArray features = jo.getJSONArray("features");
+        
         List<Earthquake> earthquakes = new ArrayList<>();
         
-        
-        String id = jo.getString("id");
-        float magnitude = jo.getJSONObject("properties").getFloat("mag");
-        float latitude = jo.getJSONObject("geometry").getJSONArray("coordinates").getFloat(0);
-        float longitude = jo.getJSONObject("geometry").getJSONArray("coordinates").getFloat(1);
-        String place = jo.getJSONObject("properties").getString("place");
-        long time = jo.getJSONObject("properties").getLong("time");
+        for(int i = 0 ; i < features.length(); i++)
+        {
+            JSONObject o = features.getJSONObject(i);
+            String id = o.getString("id");
+            float magnitude = o.getJSONObject("properties").getFloat("mag");
+            float latitude = o.getJSONObject("geometry").getJSONArray("coordinates").getFloat(1);
+            float longitude = o.getJSONObject("geometry").getJSONArray("coordinates").getFloat(0);
+            String place = o.getJSONObject("properties").getString("place");
+            long time = o.getJSONObject("properties").getLong("time");
         
         
         earthquakes.add(new Earthquake()
@@ -79,8 +94,8 @@ public class EarthquakeDAO {
                 .withLongitude(longitude)
                 .withPlace(place)
                 .withTime(time));
+        }
         
         return earthquakes;
     }
-    
 }

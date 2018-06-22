@@ -25,8 +25,9 @@
         <div id="map"></div>
         
         <div id="app">
+            <button v-on:click="removeMarker()">Remove Marker</button>
+            <button v-on:click='displayTop10Earthquakes()'>Display Top 10 Earthquakes</button>
             <p>{{ message }}</p>
-            
             <table>
                 <tr>
                     <th><button v-on:click="sort('id')">ID</button></th>
@@ -71,11 +72,19 @@
                 el: "#app",
                 data: {
                     message: "To sort the earthquakes, select which column you would like to sort by.",
-                    earthquakes : []
+                    earthquakes : [],
+                    map : null,
+                    marker : null,
+                    marker_spec : null
+                    
                 },
                 watch: {
                     earthquakes(){
-                        this.renderMap(this.earthquakes[0]);                
+                        this.renderMap(this.earthquakes[0]);
+                        for(var i = 0; i < this.earthquakes.length; i++)
+                        {
+                            this.renderMarker(this.earthquakes[i]);
+                        }
                     }
                 },
                 methods: {
@@ -92,14 +101,24 @@
                             zoom: 7
                         };
 
-                        var map = new google.maps.Map(document.getElementById('map'), map_spec);
-                        
-                        var marker_spec = {
+                        this.map = new google.maps.Map(document.getElementById('map'), map_spec);
+                        this.renderMarker(earthquake);
+                    },
+                    
+                    renderMarker(earthquake)
+                    {
+                        var coordinates = {
+                            lat : earthquake.latitude,
+                            lng : earthquake.longitude
+                            
+                        };
+                       
+                        this.marker_spec = {
                             position: coordinates,
-                            map: map
+                            map: this.map
                         };
 
-                        var marker = new google.maps.Marker(marker_spec);
+                        this.marker = new google.maps.Marker(this.marker_spec);
                     },
                     
                     sort(methodToSortBy)
@@ -108,6 +127,32 @@
                         $.get(request, function(response){
                             app.earthquakes = response;
                         });
+                    },
+                    
+                    removeMarker()
+                    {
+                        this.marker.setMap(null);
+                    },
+                    
+                    displayTop10Earthquakes()
+                    {
+                        var tempEarthquakeArray = [];
+                        $.get("servlet?sort=magnitude", function(response){
+                            this.earthquakes = response;
+                        });
+                       
+                        var arrayIndex = 0;
+                        for(var i = this.earthquakes.length - 1; i > (this.earthquakes.length - 11); i--)
+                        {
+                            tempEarthquakeArray.splice(arrayIndex, 0, this.earthquakes[i]);
+                            arrayIndex++;
+                        }
+                        
+                        //this.renderMap(tempEarthquakeArray[0]);
+                        
+                        this.earthquakes = tempEarthquakeArray;
+                        console.log("size: " + this.earthquakes.length);
+                        this.renderMap(this.earthquakes[0]);
                     }
                 }
             });

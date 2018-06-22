@@ -19,33 +19,12 @@ public class Main {
     
     public static void main(String args[]) throws IOException
     {
-        // fetches, parses, puts into response object
-        RestResponse response = new RestRequest(EARTHQUAKES_URL).doGet();
-        
-        String responseBody = response.getBody();
-        
-        //System.out.println(responseBody);
-        
-        JSONObject jo = new JSONObject(response.getBody());
-        JSONArray features = jo.getJSONArray("features");
-        
-        List<Earthquake> earthquakes = getEarthquakesFromJSONArray(features);
+      
+        List<Earthquake> earthquakes = EarthquakeDAO.getEarthquakesFromFeed();
         
         Collections.sort(earthquakes, Earthquake.MAGNITUDE);
         System.out.println(earthquakes.toString());
                
-    }
-    
-    private static List<Earthquake> getEarthquakesFromJSONArray(JSONArray ja)
-    {
-        List<Earthquake> earthquakes = new ArrayList<>();
-        
-        for(int i = 0; i < ja.length(); i++)
-        {
-            earthquakes.add(getEarthquakesFromJSONObject(ja.getJSONObject(i)));
-        }
-        
-        return earthquakes;
     }
     
     private static List<Earthquake> getEarthquakes()
