@@ -84,6 +84,7 @@ public class EarthquakesServlet extends HttpServlet {
         
         List<Earthquake> earthquakes = earthquakeCache.getIfPresent("all");
        
+        
         if(earthquakes == null)
         {
             try{
