@@ -11,7 +11,8 @@
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         
         <!-- Maps API KEY AIzaSyDnUM4ZqWUX1-sF1tuiGtMb84u3UxZTIv8 -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnUM4ZqWUX1-sF1tuiGtMb84u3UxZTIv8"></script>
+        <!-- My Maps API Key AIzaSyAPvLA2Zl3jsl7R6g5r6KgfqlzaA-Bl5HA -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPvLA2Zl3jsl7R6g5r6KgfqlzaA-Bl5HA"></script>
         
         <style>
             #map {
@@ -123,7 +124,7 @@
                     
                     sort(methodToSortBy)
                     {
-                        var request = "servlet?sort=" + methodToSortBy;
+                        var request = "servlet/data?sort=" + methodToSortBy;
                         $.get(request, function(response){
                             app.earthquakes = response;
                         });
@@ -137,7 +138,7 @@
                     displayTop10Earthquakes()
                     {
                         var tempEarthquakeArray = [];
-                        $.get("servlet?sort=magnitude", function(response){
+                        $.get("servlet/data?sort=magnitude", function(response){
                             this.earthquakes = response;
                         });
                        
@@ -157,9 +158,8 @@
                 }
             });
             
-            $.get("servlet", function(response){
-                app.earthquakes = response;
-                
+            $.get("servlet/data", function(response){
+                app.earthquakes = response;            
             });
            
         </script>
